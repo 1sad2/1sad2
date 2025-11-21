@@ -59,7 +59,7 @@ bool SignalPublish::unSubsrcibe(SignalSubscribe *sub)
             const char *signal = m_signal.toUtf8().data();
             QObject *receiver = subRegisted->getSubObj();
             const char *method = subRegisted->getMethod().toUtf8().data();
-            disconnect(sender,signal,receiver,method);
+            disconnect(sender, signal, receiver, method);
             delete subRegisted;
             return true;
         }
