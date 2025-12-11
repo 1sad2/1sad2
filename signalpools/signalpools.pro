@@ -20,19 +20,11 @@ CONFIG(release debug|release)
 }
 
 SOURCES += signalpools.cpp \
-    safepublisher.cpp \
-    safesignalmanager.cpp \
-    safesignalpools.cpp \
-    safesubscriber.cpp \
     signalpublish.cpp \
     signalsubscribe.cpp \
     signalmanager.cpp
 
 HEADERS += signalpools.h\
-    safepublisher.h \
-    safesignalmanager.h \
-    safesignalpools.h \
-    safesubscriber.h \
     signalpools_global.h \
     signalpublish.h \
     signalsubscribe.h \

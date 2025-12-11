@@ -1,5 +1,6 @@
 #include "signalpools.h"
 #include "signalmanager.h"
+
 SignalPools::SignalPools() : m_impManager(std::make_unique<SignalManager>())
 {
 }

@@ -7,18 +7,27 @@ SignalManager::SignalManager(QObject *parent)
 {
 }
 
+SignalManager::~SignalManager()
+{
+
+}
+
 bool SignalManager::publish(const QString &topic, QObject *pubObj, const char *signal)
 {
     QMutexLocker locker(&m_mutex);
 
     if (topic.isEmpty() || pubObj == nullptr || signal == nullptr)
+    {
         return false;
+    }
 
     cleanDeadPublisher(topic);
 
     // 一个 topic 只能有一个发布者
     if (m_pubMap.contains(topic))
+    {
         return false;
+    }
 
     auto pub = std::make_shared<Publisher>();
     pub->topic = topic;
@@ -32,7 +41,9 @@ bool SignalManager::publish(const QString &topic, QObject *pubObj, const char *s
     for (auto &sub : subs)
     {
         if (!sub->obj)
+        {
             continue;
+        }
 
         bool ok = QObject::connect(
             pubObj, signal,
@@ -40,7 +51,9 @@ bool SignalManager::publish(const QString &topic, QObject *pubObj, const char *s
             sub->type);
 
         if (!ok)
+        {
             qWarning() << "Connect failed (publish)" << topic << signal << sub->method;
+        }
     }
 
     return true;
@@ -51,7 +64,9 @@ bool SignalManager::unPublish(const QString &topic)
     QMutexLocker locker(&m_mutex);
 
     if (!m_pubMap.contains(topic))
+    {
         return false;
+    }
 
     auto pub = m_pubMap[topic];
 
@@ -74,13 +89,14 @@ bool SignalManager::unPublish(const QString &topic)
     return true;
 }
 
-bool SignalManager::subscribe(const QString &topic, QObject *subObj, const char *method,
-                              Qt::ConnectionType type)
+bool SignalManager::subscribe(const QString &topic, QObject *subObj, const char *method, Qt::ConnectionType type)
 {
     QMutexLocker locker(&m_mutex);
 
     if (topic.isEmpty() || subObj == nullptr || method == nullptr)
+    {
         return false;
+    }
 
     cleanDeadSubscribers(topic);
 
@@ -113,7 +129,9 @@ bool SignalManager::subscribe(const QString &topic, QObject *subObj, const char 
                 type);
 
             if (!ok)
+            {
                 qWarning() << "Connect failed (subscribe)" << topic << pub->signal << method;
+            }
         }
     }
 
@@ -125,7 +143,9 @@ bool SignalManager::unSubscribe(const QString &topic, QObject *subObj, const cha
     QMutexLocker locker(&m_mutex);
 
     if (!m_subMap.contains(topic))
+    {
         return false;
+    }
 
     auto &lst = m_subMap[topic];
 
@@ -161,7 +181,9 @@ void SignalManager::cleanDeadSubscribers(const QString &topic)
     for (int i = lst.size() - 1; i >= 0; --i)
     {
         if (lst[i]->obj == nullptr)
+        {
             lst.removeAt(i);
+        }
     }
 }
 
@@ -169,5 +191,7 @@ void SignalManager::cleanDeadPublisher(const QString &topic)
 {
     auto pub = m_pubMap.value(topic);
     if (pub && pub->obj == nullptr)
+    {
         m_pubMap.remove(topic);
+    }
 }

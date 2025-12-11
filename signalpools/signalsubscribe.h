@@ -2,6 +2,8 @@
 #define SIGNALSUBSCRIBE_H
 
 #include <QObject>
+#include <QPointer>
+#include <QString>
 
 class SignalSubscribe : public QObject
 {
@@ -14,8 +16,10 @@ public:
     QObject *getSubObj() const;
     Qt::ConnectionType getConnectType() const;
     friend bool operator == (const SignalSubscribe & subObj1,const SignalSubscribe & subObj2);
+
+    Q_DISABLE_COPY(SignalSubscribe)
 private:
-    QObject *m_subObj;
+    QPointer<QObject> m_subObj;
     QString m_topic;
     QString m_method;
     Qt::ConnectionType m_connectType;

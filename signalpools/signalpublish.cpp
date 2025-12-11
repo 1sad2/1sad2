@@ -3,10 +3,11 @@
 SignalPublish::SignalPublish( const QString &topic,QObject *publishObj,
                              const QString &signal,QObject *parent)
  : QObject(parent)
+ , m_pubObj(publishObj)
+ , m_topic(topic)
+ , m_signal(signal)
 {
-    m_pubObj = publishObj;
-    m_topic = topic;
-    m_signal = signal;
+
 }
 
 bool SignalPublish::subsribe(SignalSubscribe *sub)
@@ -34,10 +35,12 @@ bool SignalPublish::subsribe(SignalSubscribe *sub)
     QByteArray methodByte = sub->getMethod().toUtf8();
     const char *method = methodByte.data();
     Qt::ConnectionType type = sub->getConnectType();
+
     if(connect(sender,signal,receiver,method,type))
     {
         m_subObjList.append(sub);
     }
+
     return true;
 }
 
@@ -59,7 +62,9 @@ bool SignalPublish::unSubsrcibe(SignalSubscribe *sub)
             const char *signal = m_signal.toUtf8().data();
             QObject *receiver = subRegisted->getSubObj();
             const char *method = subRegisted->getMethod().toUtf8().data();
+
             disconnect(sender, signal, receiver, method);
+
             delete subRegisted;
             return true;
         }

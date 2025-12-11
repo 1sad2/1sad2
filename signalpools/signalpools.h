@@ -14,8 +14,7 @@ public:
     static SignalPools *getInstance();
     bool publish(const QString &topic, QObject *pubObj, const char *signal);
     bool unPublish(const QString &topic);
-    bool subscribe(const QString &topic, QObject *subObj, const char *method,
-                   Qt::ConnectionType type = Qt::AutoConnection);
+    bool subscribe(const QString &topic, QObject *subObj, const char *method, Qt::ConnectionType type = Qt::AutoConnection);
     bool unSubscribe(const QString &topic, QObject *subObj, const char *method);
 
 protected:

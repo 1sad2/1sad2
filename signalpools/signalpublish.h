@@ -2,6 +2,8 @@
 #define SIGNALPUBLISH_H
 
 #include <QObject>
+#include <QPointer>
+
 class SignalSubscribe;
 class SignalPublish : public QObject
 {
@@ -12,8 +14,9 @@ public:
     bool subsribe(SignalSubscribe *sub);
     bool unSubsrcibe(SignalSubscribe *sub);
     QList<SignalSubscribe *> getAllSubList();
+
 private:
-    QObject *m_pubObj;
+    QPointer<QObject> m_pubObj;
     QString m_topic;
     QString m_signal;
     QList<SignalSubscribe *> m_subObjList;
